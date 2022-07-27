@@ -53,7 +53,7 @@ searchButton.addEventListener("click", async () => {
     li.id = "lista-" + item.original_title;
 
     const button_add = document.createElement("button");
-    button_add.id = 'button' + item.original_title;
+    button_add.id = "button" + item.original_title;
     button_add.innerText = "+";
     button_add.style.cssText =
       "font-weight: bold; background-color: #4CAF50; margin-left: 10px; border: none; color: white; padding: 0 5px; text-align: center; text-decoration: none; display: inline-block; border-radius:2px ";
@@ -61,10 +61,20 @@ searchButton.addEventListener("click", async () => {
       await preencherListaFavorita(item.original_title);
       button_add.disabled = true;
     });
+
+    for (const child of Array.from(
+      (<HTMLUListElement>document.getElementById("lista-favoritos")).children
+    )) {
+      if (child.id.slice(4) === item.original_title) {
+        button_add.disabled = true;
+      }
+    }
+
     li.appendChild(button_add);
     ul.appendChild(li);
   }
   console.log(listaDeFilmes);
+
   searchContainer!.appendChild(ul);
 });
 
@@ -92,7 +102,9 @@ function preencherListaFavorita(original_title: string) {
 function removerDaListaFavorita(id: string) {
   (<HTMLLIElement>document.getElementById(id)).remove();
   console.log(id.slice(4));
-  (<HTMLButtonElement>document.getElementById('button'+ id.slice(4))).disabled = false;
+  (<HTMLButtonElement>(
+    document.getElementById("button" + id.slice(4))
+  )).disabled = false;
 }
 
 function preencherSenha() {
